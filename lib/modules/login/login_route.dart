@@ -1,47 +1,17 @@
 import 'package:appcurso/modules/home/home_route.dart';
+import 'package:appcurso/modules/login/controller/login_controller.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class LoginRoute extends StatelessWidget {
   LoginRoute({super.key});
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  Future<void> signIn(BuildContext context) async {
-    // validar los datos
-    final String email = emailController.text;
-    final String password = passwordController.text;
-
-    if (email.isEmpty || password.isEmpty) {
-      print("email o password no recibidos");
-      return;
-    }
-
-    // hacer la peticion
-    const String baseUrl =
-        "https://polar-plains-89142-ae7bf2bd796a.herokuapp.com/";
-    const String path = "api/auth/local";
-    try {
-      final result = await Dio().post(
-        "$baseUrl$path",
-        data: {
-          "identifier": email,
-          "password": password,
-        },
-      );
-      print(result);
-
-      if (result.data["jwt"] != null) {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => HomeRoute()));
-      }
-    } catch (e) {}
-  }
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -72,7 +42,7 @@ class LoginRoute extends StatelessWidget {
               // INPUTS
 
               CustomTextField(
-                controller: emailController,
+                controller: controller.emailController,
                 label: "Enter your email",
                 icon: Icons.person_outline,
               ),
@@ -80,7 +50,7 @@ class LoginRoute extends StatelessWidget {
               const SizedBox(height: 20),
 
               CustomTextField(
-                controller: passwordController,
+                controller: controller.passwordController,
                 label: "Enter your password",
                 icon: Icons.lock_outlined,
                 obscureText: true,
@@ -92,7 +62,7 @@ class LoginRoute extends StatelessWidget {
                 width: double.infinity,
                 height: 70,
                 child: ElevatedButton(
-                  onPressed: () => signIn(context),
+                  onPressed: () => controller.signIn(context),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.green),
                     shape: MaterialStateProperty.all(
@@ -101,13 +71,19 @@ class LoginRoute extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const Text(
-                    "Sign In",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                  child: Obx(
+                    () => controller.isLoading.value
+                        ? CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : Text(
+                            "Sign In",
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               ),
