@@ -10,15 +10,19 @@ import 'package:get_storage/get_storage.dart';
 class LoginController extends GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final userCredentialBox = GetStorage();
 
   RxBool isLoading = false.obs;
+
+  UserCredential? get userCredential {
+    return userCredentialBox.read<UserCredential>("userCredential");
+  }
 
   Future<void> signIn(BuildContext context) async {
     isLoading.value = true;
     // validar los datos
     final String email = emailController.text;
     final String password = passwordController.text;
-    final userCredentialBox = GetStorage();
 
     if (email.isEmpty || password.isEmpty) {
       log("email o password no recibidos");
