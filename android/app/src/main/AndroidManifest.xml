@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- ADD LOCATION PERMISSIONS -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- ADD REQUEST PERMISSIONS -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    
     <application
         android:label="appcurso"
         android:name="${applicationName}"

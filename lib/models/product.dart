@@ -27,6 +27,18 @@ class Product {
         "id": id,
         "attributes": attributes.toJson(),
       };
+
+  @override
+  String toString() {
+    return 'Product{id: $id, name: ${attributes.name}}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Product && other.id == id;
+  }
 }
 
 class Attributes {

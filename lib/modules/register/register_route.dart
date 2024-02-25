@@ -1,18 +1,16 @@
 import 'package:appcurso/common/widgets/custom_text_field_widget.dart';
 import 'package:appcurso/modules/login/controller/login_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class LoginRoute extends StatelessWidget {
-  const LoginRoute({super.key});
+class RegisterRoute extends StatelessWidget {
+  const RegisterRoute({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LoginController());
+    final controller = Get.find<LoginController>();
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -33,12 +31,7 @@ class LoginRoute extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              SvgPicture.asset(
-                "assets/login.svg",
-                width: 180,
-                height: 180,
-              ),
-              const SizedBox(height: 20),
+
               // INPUTS
 
               CustomTextField(

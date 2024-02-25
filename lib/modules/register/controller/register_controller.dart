@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-class LoginController extends GetxController {
+class RegisterController extends GetxController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final userCredentialBox = GetStorage();
