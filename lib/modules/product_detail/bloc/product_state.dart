@@ -1,6 +1,18 @@
 import 'package:appcurso/models/product.dart';
 
-abstract class ProductState {}
+abstract class ProductState {
+  final Product? product;
+  final bool isFavorite;
+  final Map shoppingCartProduct;
+  final double selectedSize;
+
+  ProductState({
+    this.product,
+    this.isFavorite = false,
+    this.shoppingCartProduct = const {},
+    this.selectedSize = 0,
+  });
+}
 
 class ProductInitial extends ProductState {}
 
@@ -11,11 +23,13 @@ class ProductLoaded extends ProductState {
     required this.product,
     this.isFavorite = false,
     this.shoppingCartProduct = const {},
+    this.selectedSize = 0,
   });
 
   final Product product;
   final bool isFavorite;
   final Map shoppingCartProduct;
+  final double selectedSize;
 }
 
 class ProductError extends ProductState {

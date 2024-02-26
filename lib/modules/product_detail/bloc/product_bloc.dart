@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/home/controller/home_controller.dart';
 import 'package:appcurso/modules/login/controller/login_controller.dart';
@@ -12,6 +14,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<FetchProduct>(_onFetchProduct);
     on<AddToCart>(_onAddToCart);
     on<AddToFavorite>(_onAddToFavorite);
+    on<SelectSize>(_selectSize);
   }
 
   final ApiService apiService = ApiService();
@@ -25,28 +28,49 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     Emitter<ProductState> emit,
   ) async {
     emit(ProductLoading());
-    final product = await apiService.getProduct(
-      token: token!,
-      productId: event.productId,
-    );
-    if (product == null) {
-      emit(ProductError(error: "Error fetching product"));
-      return;
-    }
+    try {
+      final product = await apiService.getProduct(
+        token: token!,
+        productId: event.productId,
+      );
 
-    _updateProduct(product, emit);
+      if (product == null) {
+        emit(ProductError(error: "Error fetching product"));
+        return;
+      }
+
+      _updateProduct(product, emit);
+    } catch (e) {
+      emit(ProductError(error: "Error fetching product"));
+    }
   }
 
   void _onAddToCart(AddToCart event, Emitter<ProductState> emit) {
-    emit(ProductLoading());
     homeController.addShoppingCartProduct(event.product);
-
     _updateProduct(event.product, emit);
   }
 
   void _onAddToFavorite(AddToFavorite event, Emitter<ProductState> emit) {
     homeController.toggleFavoriteProduct(event.product);
     _updateProduct(event.product, emit);
+  }
+
+  void _selectSize(SelectSize event, Emitter<ProductState> emit) {
+    final isFavorite = homeController.isFavoriteProduct(event.product);
+    final cartCount =
+        homeController.getShoppingCartProductQuantity(event.product);
+
+    emit(
+      ProductLoaded(
+        product: event.product,
+        isFavorite: isFavorite,
+        selectedSize: event.size,
+        shoppingCartProduct: {
+          "product": event.product,
+          "quantity": cartCount,
+        },
+      ),
+    );
   }
 
   _updateProduct(Product product, Emitter<ProductState> emit) {
@@ -57,6 +81,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       ProductLoaded(
         product: product,
         isFavorite: isFavorite,
+        selectedSize: state.selectedSize,
         shoppingCartProduct: {
           "product": product,
           "quantity": cartCount,

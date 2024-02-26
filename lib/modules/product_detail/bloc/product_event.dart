@@ -19,3 +19,10 @@ class AddToFavorite extends ProductEvent {
 
   final Product product;
 }
+
+class SelectSize extends ProductEvent {
+  SelectSize({required this.size, required this.product});
+
+  final double size;
+  final Product product;
+}
