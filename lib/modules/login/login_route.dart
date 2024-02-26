@@ -1,5 +1,6 @@
 import 'package:appcurso/common/widgets/custom_text_field_widget.dart';
 import 'package:appcurso/modules/login/controller/login_controller.dart';
+import 'package:appcurso/modules/register/register_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class LoginRoute extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(width: double.infinity),
+              const Spacer(),
               const Text(
                 "Welcome back!",
                 style: TextStyle(
@@ -87,6 +89,28 @@ class LoginRoute extends StatelessWidget {
                   ),
                 ),
               ),
+
+              const Spacer(flex: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Don't have an account?",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => Get.to(() => const RegisterRoute()),
+                    child: const Text(
+                      "Sign Up",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

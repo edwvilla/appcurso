@@ -7,47 +7,51 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class RegisterController extends GetxController {
+  final userNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   final userCredentialBox = GetStorage();
 
-  @override
-  void onInit() {
-    super.onInit();
-    if (userCredential != null) {
-      Future.microtask(
-        () => Get.off(() => const HomeRoute()),
-      );
-    }
-  }
+  final formKey = GlobalKey<FormState>();
 
   RxBool isLoading = false.obs;
 
-  UserCredential? get userCredential {
-    try {
-      final userCredMap = userCredentialBox.read("userCredential");
-      final userCredential = UserCredential.fromJson(userCredMap);
-      return userCredential;
-    } catch (e) {
-      log(e.toString());
-      return null;
-    }
-  }
-
-  Future<void> signIn(BuildContext context) async {
+  Future<void> signUp(BuildContext context) async {
     isLoading.value = true;
     // validar los datos
     final String email = emailController.text;
     final String password = passwordController.text;
+    final String confirmPassword = confirmPasswordController.text;
+    final String userName = userNameController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      log("email o password no recibidos");
+    if (password != confirmPassword) {
+      Get.dialog(
+        AlertDialog(
+          title: const Text("Error"),
+          content: const Text("Las contraseñas no coinciden"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      log("email, password o confirmPassword no recibidos");
       isLoading.value = false;
       return;
     }
 
     try {
-      final UserCredential? userCredential = await ApiService().signIn(
+      final UserCredential? userCredential = await ApiService().signUp(
+        userName: userName,
         email: email,
         password: password,
       );

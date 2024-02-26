@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/home/controller/home_controller.dart';
 import 'package:appcurso/modules/home/widgets/product_card_widget.dart';
+import 'package:appcurso/modules/login/controller/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,8 +13,19 @@ class HomeRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
+    final LoginController loginController = Get.find<LoginController>();
 
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () {
+              loginController.signOut();
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: FutureBuilder(
             future: controller.getProducts(),

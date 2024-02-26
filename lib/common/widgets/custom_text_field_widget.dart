@@ -7,12 +7,14 @@ class CustomTextField extends StatefulWidget {
     required this.label,
     required this.icon,
     this.obscureText = false,
+    this.validator,
   });
 
   final TextEditingController controller;
   final String label;
   final IconData icon;
   final bool obscureText;
+  final String? Function(String?)? validator;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -37,7 +39,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return Material(
       elevation: 2,
-      child: TextField(
+      child: TextFormField(
+        validator: widget.validator,
         controller: widget.controller,
         obscureText: widget.obscureText && showPassword,
         decoration: InputDecoration(

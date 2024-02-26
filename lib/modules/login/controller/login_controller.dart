@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:appcurso/models/user_credential.dart';
 import 'package:appcurso/modules/home/home_route.dart';
+import 'package:appcurso/modules/login/login_route.dart';
 import 'package:appcurso/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,8 +27,14 @@ class LoginController extends GetxController {
   UserCredential? get userCredential {
     try {
       final userCredMap = userCredentialBox.read("userCredential");
-      final userCredential = UserCredential.fromJson(userCredMap);
-      return userCredential;
+      if (userCredMap == null) {
+        return null;
+      } else if (userCredMap is UserCredential) {
+        return userCredMap;
+      } else {
+        final userCredential = UserCredential.fromJson(userCredMap);
+        return userCredential;
+      }
     } catch (e) {
       log(e.toString());
       return null;
@@ -61,5 +68,17 @@ class LoginController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void signOut() {
+    Get.defaultDialog(
+      title: "Cerrar sesión",
+      middleText: "¿Estás seguro de cerrar sesión?",
+      onCancel: () {},
+      onConfirm: () {
+        userCredentialBox.remove("userCredential");
+        Get.offAll(const LoginRoute());
+      },
+    );
   }
 }

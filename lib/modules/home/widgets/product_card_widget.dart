@@ -1,5 +1,7 @@
+import 'package:appcurso/common/utils/utils.dart';
 import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/home/controller/home_controller.dart';
+import 'package:appcurso/modules/product_detail/product_detail_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -12,19 +14,14 @@ class ProductCard extends StatelessWidget {
 
   final Product product;
 
-  String priceFormat(int price) {
-    return price.toStringAsFixed(2).replaceAllMapped(
-          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-          (Match m) => '${m[1]},',
-        );
-  }
-
   @override
   Widget build(BuildContext context) {
     final homeController = Get.find<HomeController>();
 
-    return SizedBox(
-      height: 1200,
+    return InkWell(
+      onTap: () => Get.to(
+        () => ProductDetailRoute(productId: product.id),
+      ),
       child: Card(
         color: Colors.white,
         surfaceTintColor: Colors.white,
@@ -55,10 +52,13 @@ class ProductCard extends StatelessWidget {
                 }),
               ),
               Center(
-                child: Image.network(
-                  product.attributes.imageUrl,
-                  height: 75,
-                  width: 100,
+                child: Hero(
+                  tag: product.id,
+                  child: Image.network(
+                    product.attributes.imageUrl,
+                    height: 75,
+                    width: 100,
+                  ),
                 ),
               ),
               const Spacer(),
