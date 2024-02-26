@@ -4,6 +4,7 @@ import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/home/controller/home_controller.dart';
 import 'package:appcurso/modules/home/widgets/product_card_widget.dart';
 import 'package:appcurso/modules/login/controller/login_controller.dart';
+import 'package:appcurso/modules/shopping_cart/shopping_cart_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,6 +19,15 @@ class HomeRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_basket_rounded,
+              color: Colors.redAccent,
+            ),
+            onPressed: () {
+              Get.to(() => const ShoppingCartRoute());
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.exit_to_app),
             onPressed: () {
