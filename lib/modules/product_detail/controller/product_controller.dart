@@ -12,7 +12,7 @@ class ProductController extends GetxController {
 
   late final Product product;
   ProductDetailState state = ProductDetailState.idle;
-  // final homeController = Get.find<HomeController>();
+  final homeController = Get.find<HomeController>();
 
   bool isFavorite = false;
   int cartCount = 0;
@@ -29,12 +29,12 @@ class ProductController extends GetxController {
   bool isSizeSelected(double index) => index == _selectedSize;
 
   void updateFavoriteStatus() {
-    // isFavorite = homeController.isFavoriteProduct(product);
+    isFavorite = homeController.isFavoriteProduct(product);
     update();
   }
 
   void updateCartCount() {
-    // cartCount = homeController.getShoppingCartProductQuantity(product);
+    cartCount = homeController.getShoppingCartQuantity(product);
     update();
     log("Cart count: $cartCount");
   }
@@ -79,12 +79,12 @@ class ProductController extends GetxController {
   }
 
   void addToFavorite(Product product) {
-    // homeController.toggleFavoriteProduct(product);
+    homeController.toggleFavoriteProduct(product);
     updateFavoriteStatus();
   }
 
   void addToCart(Product product) {
-    // homeController.addShoppingCartProduct(product);
+    homeController.addShoppingCartProduct(product);
     updateCartCount();
   }
 }

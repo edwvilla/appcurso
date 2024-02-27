@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/home/controller/home_controller.dart';
+import 'package:appcurso/modules/home/inherited/api_inherited.dart';
+import 'package:appcurso/modules/home/inherited/counter_inherited.dart';
 import 'package:appcurso/modules/home/widgets/product_card_widget.dart';
 import 'package:appcurso/modules/login/controller/login_controller.dart';
 import 'package:appcurso/modules/shopping_cart/shopping_cart_route.dart';
@@ -13,10 +15,44 @@ class HomeRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ApiInherited(
+      child: CounterInheritedNotifier(
+        notifier: CounterNotifier(),
+        child: const _HomeContent(),
+      ),
+    );
+  }
+}
+
+class _HomeContent extends StatelessWidget {
+  const _HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
     final LoginController loginController = Get.find<LoginController>();
 
+    final apiInherited = ApiInherited.of(context);
+
+    apiInherited?.apiService
+        .getProducts(
+      token: loginController.userCredential?.jwt ?? "",
+    )
+        .then(
+      (value) {
+        log(value.toString());
+      },
+    );
+
+    final counterInherited = CounterInheritedNotifier.of(context);
+
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          counterInherited?.notifier?.increment();
+        },
+        child: Text(counterInherited?.notifier?.value.toString() ?? ""),
+      ),
       appBar: AppBar(
         actions: [
           IconButton(
