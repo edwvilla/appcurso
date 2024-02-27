@@ -16,8 +16,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeController = Get.find<HomeController>();
-
     return InkWell(
       onTap: () => Get.to(
         () => ProductDetailRoute(productId: product.id),
@@ -32,24 +30,19 @@ class ProductCard extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.topRight,
-                child: Obx(() {
-                  final isFavorite = homeController.isFavoriteProduct(product);
-
-                  return SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () =>
-                          homeController.toggleFavoriteProduct(product),
-                      icon: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: isFavorite ? Colors.red : Colors.grey,
-                        size: 20,
-                      ),
+                child: SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {},
+                    icon: Icon(
+                      false ? Icons.favorite : Icons.favorite_border,
+                      color: false ? Colors.red : Colors.grey,
+                      size: 20,
                     ),
-                  );
-                }),
+                  ),
+                ),
               ),
               Center(
                 child: Hero(
@@ -118,80 +111,77 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Obx(
-                    () {
-                      final quantity = homeController
-                          .getShoppingCartProductQuantity(product);
-                      return quantity > 0
-                          ? Container(
-                              decoration: BoxDecoration(
-                                color: Colors.redAccent[100],
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: InkWell(
-                                      onTap: () => homeController
-                                          .removeShoppingCartProduct(product),
-                                      child: const Icon(
-                                        Icons.remove,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 1,
-                                    ),
-                                    child: Text(
-                                      quantity.toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: InkWell(
-                                      onTap: () => homeController
-                                          .addShoppingCartProduct(product),
-                                      child: const Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : SizedBox(
-                              height: 25,
-                              width: 25,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.redAccent[100],
-                                  padding: EdgeInsets.zero,
-                                ),
-                                onPressed: () => homeController
-                                    .addShoppingCartProduct(product),
-                                child: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 17,
-                                ),
-                              ),
-                            );
-                    },
-                  ),
+                  // Obx(
+                  //   () {
+                  //     final quantity = 0;
+                  //     return quantity > 0
+                  //         ?
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent[100],
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: InkWell(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.remove,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 1,
+                          ),
+                          child: Text(
+                            0.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: InkWell(
+                            onTap: () {},
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                  //         : SizedBox(
+                  //             height: 25,
+                  //             width: 25,
+                  //             child: ElevatedButton(
+                  //               style: ElevatedButton.styleFrom(
+                  //                 backgroundColor: Colors.redAccent[100],
+                  //                 padding: EdgeInsets.zero,
+                  //               ),
+                  //               onPressed: () {},
+                  //               child: const Icon(
+                  //                 Icons.add,
+                  //                 color: Colors.white,
+                  //                 size: 17,
+                  //               ),
+                  //             ),
+                  //           );
+                  //   },
+                  // ),
                 ],
               ),
             ],
