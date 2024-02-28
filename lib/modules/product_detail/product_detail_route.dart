@@ -15,27 +15,26 @@ class ProductDetailRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProductBloc, ProductState>(
-      builder: (BuildContext context, ProductState state) {
-        if (state is ProductIdle) {
-          final bloc = context.read<ProductBloc>();
-          bloc.add(FetchProduct(productId: productId));
-        }
+    return BlocProvider<ProductBloc>(
+      create: (context) =>
+          ProductBloc()..add(FetchProduct(productId: productId)),
+      child: BlocBuilder<ProductBloc, ProductState>(
+        builder: (BuildContext context, ProductState state) {
+          switch (state.runtimeType) {
+            case ProductIdle:
+            case ProductLoading:
+              return const _ProductLoading();
 
-        switch (state.runtimeType) {
-          case ProductIdle:
-          case ProductLoading:
-            return const _ProductLoading();
+            case ProductSuccess:
+              state as ProductSuccess;
+              return _ProductLoaded(product: state.product);
 
-          case ProductSuccess:
-            state as ProductSuccess;
-            return _ProductLoaded(product: state.product);
-
-          case ProductError:
-          default:
-            return const _ProductError();
-        }
-      },
+            case ProductError:
+            default:
+              return const _ProductError();
+          }
+        },
+      ),
     );
   }
 }

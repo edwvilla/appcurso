@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/login/controller/login_controller.dart';
 import 'package:appcurso/services/api_service.dart';
@@ -10,6 +12,7 @@ part "product_state.dart";
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc() : super(ProductIdle()) {
     on<FetchProduct>(_fetchProduct);
+    on<ResetProductState>(_reset);
   }
 
   // dependencias
@@ -17,6 +20,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final loginController = Get.find<LoginController>();
 
   _fetchProduct(FetchProduct event, Emitter<ProductState> emit) async {
+    log("event $event, produt id ${event.productId}");
+
     emit(ProductLoading());
 
     final String? token = loginController.userCredential?.jwt;
@@ -35,5 +40,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     } else {
       emit(ProductSuccess(product: product));
     }
+  }
+
+  _reset(ResetProductState event, Emitter<ProductState> emit) {
+    emit(ProductIdle());
   }
 }
