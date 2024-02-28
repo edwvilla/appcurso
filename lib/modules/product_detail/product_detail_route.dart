@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:appcurso/common/utils/utils.dart';
+import 'package:appcurso/models/product.dart';
+import 'package:appcurso/modules/product_detail/bloc/product_bloc.dart';
 import 'package:appcurso/modules/product_detail/controller/product_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 class ProductDetailRoute extends StatelessWidget {
@@ -10,18 +15,24 @@ class ProductDetailRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init: ProductController(productId: productId),
-      builder: (ProductController controller) {
-        switch (controller.state) {
-          case ProductDetailState.idle:
-          case ProductDetailState.loading:
+    return BlocBuilder<ProductBloc, ProductState>(
+      builder: (BuildContext context, ProductState state) {
+        if (state is ProductIdle) {
+          final bloc = context.read<ProductBloc>();
+          bloc.add(FetchProduct(productId: productId));
+        }
+
+        switch (state.runtimeType) {
+          case ProductIdle:
+          case ProductLoading:
             return const _ProductLoading();
 
-          case ProductDetailState.loaded:
-            return const _ProductLoaded();
+          case ProductSuccess:
+            state as ProductSuccess;
+            return _ProductLoaded(product: state.product);
 
-          case ProductDetailState.error:
+          case ProductError:
+          default:
             return const _ProductError();
         }
       },
@@ -45,11 +56,14 @@ class _ProductError extends StatelessWidget {
 class _ProductLoaded extends StatelessWidget {
   const _ProductLoaded({
     super.key,
+    required this.product,
   });
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ProductController>();
+    // final controller = Get.find<ProductController>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -67,7 +81,7 @@ class _ProductLoaded extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: controller.isFavorite
+            icon: false
                 ? const Icon(
                     Icons.favorite,
                     color: Colors.red,
@@ -77,7 +91,7 @@ class _ProductLoaded extends StatelessWidget {
                     color: Colors.black,
                   ),
             onPressed: () {
-              controller.addToFavorite(controller.product);
+              // controller.addToFavorite(controller.product);
             },
           ),
         ],
@@ -89,7 +103,7 @@ class _ProductLoaded extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
             ),
             onPressed: () {
-              controller.addToCart(controller.product);
+              // controller.addToCart(controller.product);
             },
             backgroundColor: Colors.redAccent,
             child: const Icon(
@@ -107,7 +121,7 @@ class _ProductLoaded extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Text(
-                controller.cartCount.toString(),
+                0.toString(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -122,9 +136,9 @@ class _ProductLoaded extends StatelessWidget {
           Expanded(
             child: Center(
               child: Hero(
-                tag: controller.product.id,
+                tag: product.id,
                 child: Image.network(
-                  controller.product.attributes.imageUrl,
+                  product.attributes.imageUrl,
                   fit: BoxFit.cover,
                   width: 300,
                 ),
@@ -170,7 +184,7 @@ class _ProductLoaded extends StatelessWidget {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.5,
                                 child: Text(
-                                  controller.product.attributes.name,
+                                  product.attributes.name,
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -180,7 +194,7 @@ class _ProductLoaded extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "By ${controller.product.attributes.brand}",
+                                "By ${product.attributes.brand}",
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.black54,
@@ -207,8 +221,7 @@ class _ProductLoaded extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    priceFormat(
-                                        controller.product.attributes.price),
+                                    priceFormat(product.attributes.price),
                                     style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -224,8 +237,7 @@ class _ProductLoaded extends StatelessWidget {
                                     color: Colors.amber,
                                   ),
                                   Text(
-                                    controller.product.attributes.rating
-                                        .toString(),
+                                    product.attributes.rating.toString(),
                                     style: const TextStyle(
                                       fontSize: 16,
                                     ),
@@ -253,8 +265,8 @@ class _ProductLoaded extends StatelessWidget {
                         ),
                         const FittedBox(),
                         ...List.from(
-                          controller.product.attributes.details.sizes.map((e) {
-                            final isSelected = controller.isSizeSelected(e);
+                          product.attributes.details.sizes.map((e) {
+                            final isSelected = false;
 
                             return ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -273,7 +285,7 @@ class _ProductLoaded extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                controller.selectedSize = e;
+                                // controller.selectedSize = e;
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(),
@@ -304,7 +316,7 @@ class _ProductLoaded extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      controller.product.attributes.description,
+                      product.attributes.description,
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.black54,
