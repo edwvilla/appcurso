@@ -63,6 +63,7 @@ class _ProductLoaded extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final controller = Get.find<ProductController>();
+    final productBloc = context.read<ProductBloc>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -102,7 +103,7 @@ class _ProductLoaded extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
             ),
             onPressed: () {
-              // controller.addToCart(controller.product);
+              productBloc.add(AddToCart(product: product));
             },
             backgroundColor: Colors.redAccent,
             child: const Icon(
@@ -120,7 +121,7 @@ class _ProductLoaded extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Text(
-                0.toString(),
+                (productBloc.state as ProductSuccess).quantity.toString(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -265,7 +266,8 @@ class _ProductLoaded extends StatelessWidget {
                         const FittedBox(),
                         ...List.from(
                           product.attributes.details.sizes.map((e) {
-                            final isSelected = false;
+                            final state = productBloc.state as ProductSuccess;
+                            final isSelected = state.selectedSize == e;
 
                             return ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -284,7 +286,12 @@ class _ProductLoaded extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                // controller.selectedSize = e;
+                                productBloc.add(
+                                  SelectSize(
+                                    size: e,
+                                    product: product,
+                                  ),
+                                );
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(),
