@@ -1,7 +1,7 @@
 import 'package:appcurso/common/utils/utils.dart';
 import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/home/controller/home_controller.dart';
-import 'package:appcurso/modules/product_detail/product_detail_route.dart';
+import 'package:appcurso/modules/product_detail/product_detail_route_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -20,7 +20,7 @@ class ProductCard extends StatelessWidget {
 
     return InkWell(
       onTap: () => Get.to(
-        () => ProductDetailRoute(productId: product.id),
+        () => ProductDetailRouteBloc(productId: product.id),
       ),
       child: Card(
         color: Colors.white,
