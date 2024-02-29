@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:appcurso/models/product.dart';
+import 'package:appcurso/modules/home/controller/home_controller.dart';
 import 'package:appcurso/modules/login/controller/login_controller.dart';
 import 'package:appcurso/modules/shopping_cart/controller/shopping_cart_controller.dart';
 import 'package:appcurso/services/api_service.dart';
@@ -25,10 +26,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final apiService = ApiService();
   final loginController = Get.find<LoginController>();
   final shoppingCartController = Get.find<ShoppingCartController>();
+  final homeController = Get.find<HomeController>();
 
   _fetchProduct(FetchProduct event, Emitter<ProductState> emit) async {
-    log("event $event, produt id ${event.productId}");
-
     emit(ProductLoading());
 
     final String? token = loginController.userCredential?.jwt;
@@ -49,34 +49,45 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     }
   }
 
-  FutureOr<void> _addToCart(AddToCart event, Emitter<ProductState> emit) {
-    shoppingCartController.addShoppingCartProduct(event.product);
+  _updateProduct(Product product, Emitter<ProductState> emit, [double? size]) {
     final quantity =
-        shoppingCartController.getShoppingCartProductQuantity(event.product);
+        shoppingCartController.getShoppingCartProductQuantity(product);
+    final isFavorite = homeController.isFavoriteProduct(product);
 
     emit(
       ProductSuccess(
-        product: event.product,
+        product: product,
         quantity: quantity,
+        isFavorite: isFavorite,
+        selectedSize: size ?? state.selectedSize,
       ),
     );
   }
 
+  FutureOr<void> _addToCart(AddToCart event, Emitter<ProductState> emit) {
+    shoppingCartController.addShoppingCartProduct(event.product);
+    _updateProduct(event.product, emit);
+  }
+
   FutureOr<void> _removeFromCart(
-      RemoveFromCart event, Emitter<ProductState> emit) {}
+      RemoveFromCart event, Emitter<ProductState> emit) {
+    shoppingCartController.removeShoppingCartProduct(event.product);
+    _updateProduct(event.product, emit);
+  }
 
   FutureOr<void> _addToFavorite(
-      AddToFavorite event, Emitter<ProductState> emit) {}
+      AddToFavorite event, Emitter<ProductState> emit) {
+    homeController.toggleFavoriteProduct(event.product);
+    _updateProduct(event.product, emit);
+  }
 
   FutureOr<void> _removeFromFavorite(
-      RemoveFromFavorite event, Emitter<ProductState> emit) {}
+      RemoveFromFavorite event, Emitter<ProductState> emit) {
+    homeController.toggleFavoriteProduct(event.product);
+    _updateProduct(event.product, emit);
+  }
 
   FutureOr<void> _selectSize(SelectSize event, Emitter<ProductState> emit) {
-    emit(
-      ProductSuccess(
-        product: event.product,
-        selectedSize: event.size,
-      ),
-    );
+    _updateProduct(event.product, emit, event.size);
   }
 }

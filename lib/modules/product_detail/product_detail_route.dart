@@ -27,7 +27,7 @@ class ProductDetailRoute extends StatelessWidget {
 
             case ProductSuccess:
               state as ProductSuccess;
-              return _ProductLoaded(product: state.product);
+              return _ProductLoaded(product: state.product!);
 
             case ProductError:
             default:
@@ -64,6 +64,7 @@ class _ProductLoaded extends StatelessWidget {
   Widget build(BuildContext context) {
     // final controller = Get.find<ProductController>();
     final productBloc = context.read<ProductBloc>();
+    final state = productBloc.state as ProductSuccess;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -81,7 +82,7 @@ class _ProductLoaded extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: false
+            icon: state.isFavorite
                 ? const Icon(
                     Icons.favorite,
                     color: Colors.red,
@@ -92,6 +93,7 @@ class _ProductLoaded extends StatelessWidget {
                   ),
             onPressed: () {
               // controller.addToFavorite(controller.product);
+              productBloc.add(AddToFavorite(product: product));
             },
           ),
         ],
@@ -121,7 +123,7 @@ class _ProductLoaded extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Text(
-                (productBloc.state as ProductSuccess).quantity.toString(),
+                state.quantity.toString(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
