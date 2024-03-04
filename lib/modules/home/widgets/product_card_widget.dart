@@ -2,6 +2,7 @@ import 'package:appcurso/common/utils/utils.dart';
 import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/home/controller/home_controller.dart';
 import 'package:appcurso/modules/product_detail/product_detail_route.dart';
+import 'package:appcurso/modules/shopping_cart/controller/shopping_cart_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeController = Get.find<HomeController>();
+    final shoppingCartController = Get.find<ShoppingCartController>();
 
     return InkWell(
       onTap: () => Get.to(
@@ -120,7 +122,7 @@ class ProductCard extends StatelessWidget {
                   const Spacer(),
                   Obx(
                     () {
-                      final quantity = homeController
+                      final quantity = shoppingCartController
                           .getShoppingCartProductQuantity(product);
                       return quantity > 0
                           ? Container(
@@ -135,7 +137,7 @@ class ProductCard extends StatelessWidget {
                                     height: 20,
                                     width: 20,
                                     child: InkWell(
-                                      onTap: () => homeController
+                                      onTap: () => shoppingCartController
                                           .removeShoppingCartProduct(product),
                                       child: const Icon(
                                         Icons.remove,
@@ -161,7 +163,7 @@ class ProductCard extends StatelessWidget {
                                     height: 20,
                                     width: 20,
                                     child: InkWell(
-                                      onTap: () => homeController
+                                      onTap: () => shoppingCartController
                                           .addShoppingCartProduct(product),
                                       child: const Icon(
                                         Icons.add,
@@ -181,7 +183,7 @@ class ProductCard extends StatelessWidget {
                                   backgroundColor: Colors.redAccent[100],
                                   padding: EdgeInsets.zero,
                                 ),
-                                onPressed: () => homeController
+                                onPressed: () => shoppingCartController
                                     .addShoppingCartProduct(product),
                                 child: const Icon(
                                   Icons.add,

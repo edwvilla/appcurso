@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/home/controller/home_controller.dart';
 import 'package:appcurso/modules/login/controller/login_controller.dart';
+import 'package:appcurso/modules/shopping_cart/controller/shopping_cart_controller.dart';
 import 'package:appcurso/services/api_service.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,7 @@ class ProductController extends GetxController {
   late final Product product;
   ProductDetailState state = ProductDetailState.idle;
   final homeController = Get.find<HomeController>();
+  final shoppingCartController = Get.find<ShoppingCartController>();
 
   bool isFavorite = false;
   int cartCount = 0;
@@ -34,7 +36,7 @@ class ProductController extends GetxController {
   }
 
   void updateCartCount() {
-    cartCount = homeController.getShoppingCartProductQuantity(product);
+    cartCount = shoppingCartController.getShoppingCartProductQuantity(product);
     update();
     log("Cart count: $cartCount");
   }
@@ -84,7 +86,7 @@ class ProductController extends GetxController {
   }
 
   void addToCart(Product product) {
-    homeController.addShoppingCartProduct(product);
+    shoppingCartController.addShoppingCartProduct(product);
     updateCartCount();
   }
 }

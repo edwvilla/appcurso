@@ -4,6 +4,7 @@ import 'package:appcurso/models/product.dart';
 import 'package:appcurso/modules/home/controller/home_controller.dart';
 import 'package:appcurso/modules/home/widgets/product_card_widget.dart';
 import 'package:appcurso/modules/login/controller/login_controller.dart';
+import 'package:appcurso/modules/shopping_cart/controller/shopping_cart_controller.dart';
 import 'package:appcurso/modules/shopping_cart/shopping_cart_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,9 @@ class HomeRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController controller = Get.put(HomeController());
+    final ShoppingCartController shoppingCartController =
+        Get.put(ShoppingCartController());
+
     final LoginController loginController = Get.find<LoginController>();
 
     return Scaffold(
