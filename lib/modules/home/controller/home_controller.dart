@@ -9,6 +9,14 @@ class HomeController extends GetxController {
   final apiService = ApiService();
   final LoginController loginController = Get.find<LoginController>();
 
+  final _selectedPage = 0.obs;
+
+  changePage(int index) {
+    _selectedPage.value = index;
+  }
+
+  RxInt get currentPage => _selectedPage;
+
   final _favoriteProducts = <Product>[].obs;
 
   List<Product> get favoriteProducts => _favoriteProducts;
