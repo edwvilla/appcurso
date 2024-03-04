@@ -4,13 +4,20 @@
 
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+
+part "product.g.dart";
+
 List<Product> productsFromJson(List list) =>
     list.map<Product>((p) => Product.fromJson(p)).toList();
 
 String productToJson(Product data) => json.encode(data.toJson());
 
+@HiveType(typeId: 1)
 class Product {
+  @HiveField(0)
   final int id;
+  @HiveField(1)
   final Attributes attributes;
 
   Product({
@@ -41,16 +48,27 @@ class Product {
   }
 }
 
+@HiveType(typeId: 2)
 class Attributes {
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final double price;
+  @HiveField(2)
   final double rating;
+  @HiveField(3)
   final String imageUrl;
+  @HiveField(4)
   final Details details;
+  @HiveField(5)
   final String description;
+  @HiveField(6)
   final String brand;
+  @HiveField(7)
   final DateTime createdAt;
+  @HiveField(8)
   final DateTime updatedAt;
+  @HiveField(9)
   final DateTime publishedAt;
 
   Attributes({
@@ -93,7 +111,9 @@ class Attributes {
       };
 }
 
+@HiveType(typeId: 3)
 class Details {
+  @HiveField(0)
   final List<double> sizes;
 
   Details({

@@ -35,7 +35,7 @@ class ShoppingCartRoute extends StatelessWidget {
           return ListView.builder(
             itemCount: products.length,
             itemBuilder: (context, index) {
-              final product = products[index]["product"] as Product;
+              final Product product = products[index].product;
 
               return Card(
                 color: Colors.white,
