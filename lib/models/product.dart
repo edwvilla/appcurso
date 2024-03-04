@@ -43,7 +43,7 @@ class Product {
 
 class Attributes {
   final String name;
-  final int price;
+  final double price;
   final double rating;
   final String imageUrl;
   final Details details;
@@ -68,7 +68,7 @@ class Attributes {
 
   factory Attributes.fromJson(Map<String, dynamic> json) => Attributes(
         name: json["name"],
-        price: json["price"],
+        price: json["price"].toDouble(),
         rating: json["rating"]?.toDouble(),
         imageUrl: json["imageUrl"],
         details: Details.fromJson(json["details"]),
