@@ -25,7 +25,7 @@ class Product {
     required this.attributes,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
+  factory Product.fromJson(json) => Product(
         id: json["id"],
         attributes: Attributes.fromJson(json["attributes"]),
       );

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "150887248358",
+    "project_id": "appcurso-f5ce2",
+    "storage_bucket": "appcurso-f5ce2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150887248358:android:b906644110117765872627",
+        "android_client_info": {
+          "package_name": "com.example.appcurso"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPq_A7m01aC3eht1sXiRy0ogY-9rfAA1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
